@@ -6,7 +6,7 @@ const helloWorld = (req,res) =>{
 
 const saveUser = async (req, res) => {
     try {
-      const { name, email, profileURL } = req.body;
+      const { name, email } = req.body;
       const existingUser = await User.findOne({ email });
   
       if (existingUser) {
@@ -15,8 +15,7 @@ const saveUser = async (req, res) => {
   
       const newUser = new User({
         email,
-        name,
-        profileURL,
+        name
       });
   
       await newUser.save();
