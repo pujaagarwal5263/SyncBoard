@@ -8,7 +8,15 @@ const userSchema = new mongoose.Schema({
   email:{
     type: String,
     required: true,
-  }
+  },
+  myBoards: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Board'
+  }],
+  participatedBoards: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Board'
+  }]
 });
 
 const User = mongoose.model('userSchema', userSchema);
