@@ -11,7 +11,7 @@ const saveUser = async (req, res) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return res.status(200).send("User already saved");
+      return res.status(200).json({ message: "User already saved" });
     }
 
     const newUser = new User({
@@ -21,10 +21,10 @@ const saveUser = async (req, res) => {
 
     await newUser.save();
 
-    return res.status(201).send("User saved");
+    return res.status(201).json({ message: "User saved" });
   } catch (err) {
     console.log(err);
-    return res.status(500).send("Internal Server Error");
+    return res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -72,11 +72,9 @@ const deleteBoard = async (req, res) => {
     }
 
     if (board.hostID.toString() !== user._id.toString()) {
-      return res
-        .status(403)
-        .json({
-          message: "Access denied. This board doesn't belong to the user.",
-        });
+      return res.status(403).json({
+        message: "Access denied. This board doesn't belong to the user.",
+      });
     }
 
     user.myBoards.pull(board._id);
@@ -122,7 +120,9 @@ const addParticipants = async (req, res) => {
 const getBoardDetails = async (req, res) => {
   try {
     const boardId = req.params.boardId;
-    const board = await Board.findOne({ boardId: boardId }).populate('participants', 'name email');
+    const board = await Board.findOne({ boardId: boardId })
+      .populate("hostID")
+      .populate("participants");
 
     if (!board) {
       return res.status(404).json({ message: "Board not found" });
@@ -135,4 +135,27 @@ const getBoardDetails = async (req, res) => {
   }
 };
 
-module.exports = { helloWorld, saveUser, createBoard, addParticipants, deleteBoard, getBoardDetails };
+const getMyBoards = async (req, res) => {
+  try {
+    const userEmail = req.params.userEmail;
+    const user = await User.findOne({ email: userEmail }).populate("myBoards");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json(user.myBoards);
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = {
+  helloWorld,
+  saveUser,
+  createBoard,
+  addParticipants,
+  deleteBoard,
+  getBoardDetails,
+  getMyBoards,
+};

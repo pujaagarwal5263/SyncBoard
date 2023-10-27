@@ -1,23 +1,20 @@
 const mongoose = require('mongoose');
 
 const boardSchema = new mongoose.Schema({
-    id: {
-      type: String,
-      required: true,
-    },
     boardId:{
       type: String,
+      required: true,
     },
     boardName: {
       type: String,
     },
     hostID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User", 
+      ref: "userSchema", 
     },
     participants: [{
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'userSchema'
     }]
   });
   

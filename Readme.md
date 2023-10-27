@@ -91,3 +91,14 @@ To get all details of board
 ```
 /board-details/boardId
 ```
+
+## 6. GET: /get-my-boards
+
+**Description:**
+To get all boards of a user
+
+**URL structure:**
+
+```
+/get-my-boards/:userEmail
+```
