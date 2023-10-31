@@ -63,7 +63,7 @@ To add participant to existing board.
 
 ```json
 {
-  "participants":["user1@gmail.com","user2@gmail.com"]
+  "participant":"user1@gmail.com"
 }
 ```
 
@@ -101,4 +101,52 @@ To get all boards of a user
 
 ```
 /get-my-boards/:userEmail
+```
+
+## 7. GET: /validate-boardid
+
+**Description:**
+To check validation of board ID.
+
+**URL structure:**
+
+```
+/validate-boardid/:boardId
+```
+
+## 8. POST: /save-board-id
+
+**Description:**
+To save a board ID to collection.
+
+**Request Payload:**
+
+```json
+{
+  "boardId": "342-3424-543"
+}
+```
+
+## 9. POST: /remove-board-id
+
+**Description:**
+To remove a board ID from collection.
+
+**Request Payload:**
+
+```json
+{
+  "boardId": "342-3424-543"
+}
+```
+
+## 10. GET: /get-participated-board
+
+**Description:**
+To get all boards of a user where he has participated
+
+**URL structure:**
+
+```
+/get-participated-board/:userEmail
 ```
