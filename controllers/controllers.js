@@ -78,6 +78,8 @@ const deleteBoard = async (req, res) => {
       });
     }
 
+    await BoardIdTracker.updateOne({ boardId }, { isValid: false });
+
     await user.myBoards.pull(board._id);
 
     await board.deleteOne({ boardId: boardId });
@@ -217,8 +219,8 @@ const getMyBoards = async (req, res) => {
 
 const saveBoardID = async (req, res) => {
   try {
-    const { boardId } = req.body;
-    const newTracker = new BoardIdTracker({ boardId });
+    const { boardId, hostType } = req.body;
+    const newTracker = new BoardIdTracker({ boardId, hostType });
     await newTracker.save();
     return res.status(201).json({ message: "Board ID saved successfully" });
   } catch (err) {
@@ -247,14 +249,9 @@ const checkValidation = async (req, res) => {
     const { boardId } = req.params;
     const tracker = await BoardIdTracker.findOne({ boardId });
     if (tracker) {
-      if (tracker.isValid) {
-        return res.status(200).json({ isValid: true });
-      } else {
-        return res.status(200).json({ isValid: false });
-      }
-    } else {
-      return res.status(200).json({ isValid: false });
+      return res.status(200).json(tracker);
     }
+    return res.status(404).json({ message: "Board ID not found" });
   } catch (err) {
     return res.status(500).json({ error: "Internal Server Error" });
   }

@@ -1,16 +1,23 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const BoardIdTrackerSchema = new mongoose.Schema({
   boardId: {
     type: String,
     required: true,
   },
-  isValid:{
+  isValid: {
     type: Boolean,
     default: true,
-  }
+  },
+  hostType: {
+    type: String,
+    required: true,
+  },
 });
 
-const BoardIdTracker = mongoose.model('BoardIdTrackerSchema', BoardIdTrackerSchema);
+const BoardIdTracker = mongoose.model(
+  "BoardIdTrackerSchema",
+  BoardIdTrackerSchema
+);
 
 module.exports = BoardIdTracker;
