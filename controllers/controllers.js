@@ -56,7 +56,25 @@ const createBoard = async (req, res) => {
   }
 };
 
-const updateBoard = async (req, res) => {};
+const updateBoard = async (req, res) => {
+  try {
+    const { boardId, boardName, boardData } = req.body;
+    const board = await Board.findOne({ boardId: boardId });
+
+    if (!board) {
+      return res.status(404).json({ message: "Board not found" });
+    }
+
+    board.boardData = boardData;
+    board.boardName = boardName;
+    await board.save();
+
+    return res.status(200).json({ message: "Board updated successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
 
 const deleteBoard = async (req, res) => {
   try {
@@ -164,9 +182,7 @@ const addParticipants = async (req, res) => {
 const getBoardDetails = async (req, res) => {
   try {
     const boardId = req.params.boardId;
-    const board = await Board.findOne({ boardId: boardId })
-      .populate("hostID")
-      .populate("participants");
+    const board = await Board.findOne({ boardId: boardId });
 
     if (!board) {
       return res.status(404).json({ message: "Board not found" });
@@ -311,6 +327,7 @@ module.exports = {
   helloWorld,
   saveUser,
   createBoard,
+  updateBoard,
   addParticipants,
   deleteBoard,
   getBoardDetails,
