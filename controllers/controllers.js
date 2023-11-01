@@ -150,7 +150,7 @@ const addParticipants = async (req, res) => {
         .json({ message: "Participant added successfully" });
     } else {
       return res
-        .status(400)
+        .status(200)
         .json({ message: "Invalid participant or already added" });
     }
   } catch (err) {
