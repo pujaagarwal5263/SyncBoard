@@ -65,8 +65,8 @@ const updateBoard = async (req, res) => {
       return res.status(404).json({ message: "Board not found" });
     }
 
-    board.boardData = boardData;
-    board.boardName = boardName;
+    if (boardData) board.boardData = boardData;
+    if (boardName) board.boardName = boardName;
     await board.save();
 
     return res.status(200).json({ message: "Board updated successfully" });
