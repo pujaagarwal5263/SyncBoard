@@ -184,11 +184,18 @@ const getBoardDetails = async (req, res) => {
     const boardId = req.params.boardId;
     const board = await Board.findOne({ boardId: boardId });
 
+    const host = await User.findById(board.hostID);
+
+    const returnBoard = {
+      ...board._doc,
+      host: host.email,
+    };
+
     if (!board) {
       return res.status(404).json({ message: "Board not found" });
     }
 
-    return res.status(200).json(board);
+    return res.status(200).json(returnBoard);
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
