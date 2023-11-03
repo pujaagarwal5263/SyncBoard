@@ -56,18 +56,19 @@ const createBoard = async (req, res) => {
   }
 };
 
-const updateBoard = async (req, res) => {
+const updateBoardData = async (req, res) => {
   try {
-    const { boardId, boardName, boardData } = req.body;
+    const { boardId, boardData } = req.body;
     const board = await Board.findOne({ boardId: boardId });
 
     if (!board) {
       return res.status(404).json({ message: "Board not found" });
     }
 
-    if (boardData) board.boardData = boardData;
-    if (boardName) board.boardName = boardName;
-    await board.save();
+    await Board.findOneAndUpdate(
+      { boardId: boardId },
+      { boardData: boardData }
+    );
 
     return res.status(200).json({ message: "Board updated successfully" });
   } catch (err) {
@@ -330,11 +331,32 @@ const userHasBoards = async (req, res) => {
   }
 };
 
+const updateBoardName = async (req, res) => {
+  try {
+    const { boardId, boardName } = req.body;
+    const board = await Board.findOne({ boardId: boardId });
+
+    if (!board) {
+      return res.status(404).json({ message: "Board not found" });
+    }
+
+    await Board.findOneAndUpdate(
+      { boardId: boardId },
+      { boardName: boardName }
+    );
+
+    return res.status(200).json({ message: "Board name updated successfully" });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: "Server error" });
+  }
+};
+
 module.exports = {
   helloWorld,
   saveUser,
   createBoard,
-  updateBoard,
+  updateBoardData,
   addParticipants,
   deleteBoard,
   getBoardDetails,
@@ -344,4 +366,5 @@ module.exports = {
   checkValidation,
   participateBoards,
   userHasBoards,
+  updateBoardName,
 };
